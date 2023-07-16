@@ -6,7 +6,7 @@
         {
             Console.WriteLine("Welcome to Snake And Ladder program");
             SnakeAndLadder snakeandladder = new SnakeAndLadder();
-            snakeandladder.Position();
+            snakeandladder.StartPosition();
         }
     }
 }
