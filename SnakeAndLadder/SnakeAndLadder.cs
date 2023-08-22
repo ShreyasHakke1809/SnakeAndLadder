@@ -3,47 +3,73 @@
     internal class SnakeAndLadder
     {
         public const int NO_PLAY = 0, LADDER = 1, SNAKE = 2, WINNING_POSITION = 100;
-        public int player_Position = 0, DiceRoll, DiceCount = 0;
-        public void StartPosition()
+        public static int DiceRoll, players = 1;
+
+        public static int[] player = new int[3] { 0, 0, 0 };
+        public static int[] playerDiceCount = new int[3] { 0, 0, 0 };
+
+        public static Random random = new Random();
+
+        public static void SwitchPlayers()
         {
-            Console.WriteLine("Game starts now...");
-            Console.WriteLine("Starting position of player is: " + player_Position);
-            Random random = new Random();
 
-            while (player_Position < WINNING_POSITION)
+            while (player[1] < WINNING_POSITION && player[2] < WINNING_POSITION)
             {
-                DiceRoll = random.Next(1, 7);
-                DiceCount++;
-                Console.WriteLine("\nDiceCount: {0} \nPlayer gets Dice Number: {1}", DiceCount, DiceRoll);
-
-                switch (random.Next(0, 3))
+                if (players == 1)
                 {
-                    case NO_PLAY:
-                        Console.WriteLine("(No Play) Player Position: " + player_Position);
-                        break;
+                    StartPosition(1);
+                    players = 2;
+                    continue;
 
-                    case LADDER:
-                        player_Position += DiceRoll;
-                        if (player_Position > WINNING_POSITION)
-                        {
-                            player_Position -= DiceRoll;
-                        }
-                        Console.WriteLine("(Ladder) Player Position: " + player_Position);
-                        break;
-                    case SNAKE:
-                        player_Position -= DiceRoll;
-                        if (player_Position < 0)
-                        {
-                            player_Position = 0;
-                        }
-                        Console.WriteLine("(Snake) Player Position " + player_Position);
-                        break;
                 }
+                if (players == 2)
+                {
+                    StartPosition(2);
+                    players = 1;
+                    continue;
 
+                }
             }
-            Console.WriteLine("\n Congratulations you Won \n");
-            Console.WriteLine("Number of times the Dice was played to win the game: " + DiceCount);
         }
 
+        public static void StartPosition(int playerNum)
+        {
+            DiceRoll = random.Next(1, 7);
+            Console.WriteLine("\nPlayer {0} gets Dice value: {1}", playerNum, DiceRoll);
+            playerDiceCount[playerNum]++;
+
+            switch (random.Next(0, 3))
+            {
+                case NO_PLAY:
+                    Console.WriteLine("(No Play) Player Position: " + player[playerNum]);
+                    break;
+
+                case LADDER:
+                    player[playerNum] += DiceRoll;
+
+                    if (player[playerNum] > WINNING_POSITION)
+                    {
+                        player[playerNum] -= DiceRoll;   //Player stays at same position if player position is more than 100
+                    }
+                    Console.WriteLine("(Ladder) Player Position: " + player[playerNum]);
+                    if (player[playerNum] == WINNING_POSITION)
+                    {
+                        Console.WriteLine("\nPlayer {0} Won the Game With Dice Count Of :{1} ", playerNum, playerDiceCount[playerNum]);
+                        break;
+                    }
+                    StartPosition(playerNum);       //Player plays again (for ladder option)
+                    break;
+                case SNAKE:
+                    player[playerNum] -= DiceRoll;
+
+                    if (player[playerNum] < 0)
+                    {
+                        player[playerNum] = 0;           //Player starts from 0 If player position is negative
+                    }
+                    Console.WriteLine("(Snake) Player Position " + player[playerNum]);
+                    break;
+            }
+
+        }
     }
 }

@@ -5,8 +5,8 @@
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to Snake And Ladder program");
-            SnakeAndLadder snakeandladder = new SnakeAndLadder();
-            snakeandladder.StartPosition();
+            Console.WriteLine("Starting position of player 1 and 2 is: 0 0");
+            SnakeAndLadder.SwitchPlayers();
         }
     }
 }
